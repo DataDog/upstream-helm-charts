@@ -71,6 +71,9 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `cluster.xpackEnable`                | Writes the X-Pack configuration options to the configuration file   | `false`                              |
 | `cluster.config`                     | Additional cluster config appended                                  | `{}`                                 |
 | `cluster.env`                        | Cluster environment variables                                       | `{}`                                 |
+| `cluster.routing_attributes`         | Cluster routing attributes                                          | `nil`                                |
+| `cluster.slowlogEnable`              | Enable Slowlog Logging                                              | `false`                              |
+| `cluster.gclogEnable`                | Enable GC Logging                                                   | `false`                              |
 | `client.name`                        | Client component name                                               | `client`                             |
 | `client.replicas`                    | Client node replicas (deployment)                                   | `2`                                  |
 | `client.resources`                   | Client node resources requests & limits                             | `{} - cpu limit must be an integer`  |
@@ -117,6 +120,8 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `data.tolerations`                   | Data tolerations                                                    | `{}`                                 |
 | `data.terminationGracePeriodSeconds` | Data termination grace period (seconds)                             | `3600`                               |
 | `data.antiAffinity`                  | Data anti-affinity policy                                           | `soft`                               |
+| `index`                              | Index/Action Configuration (Ex. index.number_of_shards)             | `{}`                                 |
+| `plugins`                            | Mandadtory Plugins                                                  | `[]`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -130,7 +135,7 @@ The YAML value of cluster.config is appended to elasticsearch.yml file for addit
 
 ## Application Version
 
-This chart aims to support Elasticsearch v2 and v5 deployments by specifying the `values.yaml` parameter `appVersion`.
+This chart aims to support Elasticsearch v1, v2, v5 and v6 deployments by specifying the `values.yaml` parameter `appVersion`.
 
 ### Version Specific Features
 
