@@ -119,4 +119,4 @@ monitor.jvm.gc.young.info: ${GC_LOG_YOUNG_INFO:700ms}
 monitor.jvm.gc.young.warn: ${GC_LOG_YOUNG_WARN:1s}
 {{- end }}
 
-{{ end-}}
+{{ end -}}
