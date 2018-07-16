@@ -35,7 +35,7 @@ client:
 #    example: client-svc-foo
   heapSize: "512m"
   java:
-    opts_equal: {}
+    optsEqual: {}
     opts: {}
   antiAffinity: "soft"
   nodeSelector: {}
@@ -58,7 +58,7 @@ master:
   replicas: 3
   heapSize: "512m"
   java:
-    opts_equal: {}
+    optsEqual: {}
     opts: {}
   persistence:
     enabled: true
@@ -87,7 +87,7 @@ data:
   replicas: 2
   heapSize: "1536m"
   java:
-    opts_equal: {}
+    optsEqual: {}
     opts: {}
   persistence:
     enabled: true
