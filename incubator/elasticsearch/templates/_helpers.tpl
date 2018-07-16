@@ -54,8 +54,8 @@ We can add custom overrides here.
 `opts_equals` are applied with `-` prefix and `=` option. Ex. `foo: bar` -> `-foo=bar`
 `opts` are applied with `-` prefix and without a `=`. Ex. `foo: bar` -> `-foobar`
 */}}
-{{- define "elasticsearch.client.java_opts" -}}
--Djava.net.preferIPv4Stack=true {{ if .Values.client.heapSize }}-Xms{{ .Values.client.heapSize }} -Xmx{{ .Values.client.heapSize }}{{ end }}{{- range $opt, $val := .Values.client.java.opts_equals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.client.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
+{{- define "elasticsearch.client.javaOpts" -}}
+-Djava.net.preferIPv4Stack=true {{ if .Values.client.heapSize }}-Xms{{ .Values.client.heapSize }} -Xmx{{ .Values.client.heapSize }}{{ end }}{{- range $opt, $val := .Values.client.java.optsEquals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.client.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
 {{- end -}}
 
 {{/*
@@ -65,8 +65,8 @@ We can add custom overrides here.
 `opts_equals` are applied with `-` prefix and `=` option. Ex. `foo: bar` -> `-foo=bar`
 `opts` are applied with `-` prefix and without a `=`. Ex. `foo: bar` -> `-foobar`
 */}}
-{{- define "elasticsearch.master.java_opts" -}}
--Djava.net.preferIPv4Stack=true {{ if .Values.master.heapSize }}-Xms{{ .Values.master.heapSize }} -Xmx{{ .Values.master.heapSize }}{{ end }}{{- range $opt, $val := .Values.master.java.opts_equals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.master.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
+{{- define "elasticsearch.master.javaOpts" -}}
+-Djava.net.preferIPv4Stack=true {{ if .Values.master.heapSize }}-Xms{{ .Values.master.heapSize }} -Xmx{{ .Values.master.heapSize }}{{ end }}{{- range $opt, $val := .Values.master.java.optsEquals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.master.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
 {{- end -}}
 
 {{/*
@@ -76,6 +76,6 @@ We can add custom overrides here.
 `opts_equals` are applied with `-` prefix and `=` option. Ex. `foo: bar` -> `-foo=bar`
 `opts` are applied with `-` prefix and without a `=`. Ex. `foo: bar` -> `-foobar`
 */}}
-{{- define "elasticsearch.data.java_opts" -}}
--Djava.net.preferIPv4Stack=true {{ if .Values.data.heapSize }}-Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }}{{ end }}{{- range $opt, $val := .Values.data.java.opts_equals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.data.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
+{{- define "elasticsearch.data.javaOpts" -}}
+-Djava.net.preferIPv4Stack=true {{ if .Values.data.heapSize }}-Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }}{{ end }}{{- range $opt, $val := .Values.data.java.optsEquals }}-{{ $opt }}={{ $val }} {{- end}} {{- range $opt, $val := .Values.data.java.opts }}-{{ $opt }}{{ $val }} {{- end}}
 {{- end -}}

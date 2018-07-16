@@ -96,7 +96,7 @@ spec:
             resourceFieldRef:
               resource: limits.cpu
         - name: ES_JAVA_OPTS
-          value: {{ template "elasticsearch.master.java_opts" . }}
+          value: {{ template "elasticsearch.master.javaOpts" . }}
         {{- range $key, $value :=  .Values.cluster.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}

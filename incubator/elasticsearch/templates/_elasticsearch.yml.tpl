@@ -1,7 +1,7 @@
 {{ define "elasticsearch.yml" -}}
 cluster.name: {{ .Values.cluster.name }}
-{{ if .Values.cluster.routing_attributes }}
-cluster.routing.allocation.awareness.attributes: {{ .Values.cluster.routing_attributes }}
+{{ if .Values.cluster.routingAttributes }}
+cluster.routing.allocation.awareness.attributes: {{ .Values.cluster.routingAttributes }}
 {{ end }}
 
 node.data: ${NODE_DATA:true}
