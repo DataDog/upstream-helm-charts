@@ -1,4 +1,5 @@
 {{ define "elasticsearch.yml" -}}
+
 cluster.name: {{ .Values.cluster.name }}
 {{ if .Values.cluster.routingAttributes }}
 cluster.routing.allocation.awareness.attributes: {{ .Values.cluster.routingAttributes }}

@@ -9,7 +9,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   elasticsearch.yml: |-
-    {{ include "elasticsearch.yml" . | indent 4 }}
+{{ include "elasticsearch.yml" . | indent 4 }}
 {{- if hasPrefix "2." .Values.image.tag }}
   logging.yml: |-
     # you can override this using by setting a system property, for example -Des.logger.level=DEBUG
