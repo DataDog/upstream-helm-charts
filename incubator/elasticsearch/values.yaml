@@ -32,6 +32,7 @@ client:
   antiAffinity: "soft"
   nodeSelector: {}
   tolerations: {}
+  initContainers: {}
   resources:
     limits:
       cpu: "1"
@@ -58,6 +59,7 @@ master:
   antiAffinity: "soft"
   nodeSelector: {}
   tolerations: {}
+  initContainers: {}
   resources:
     limits:
       cpu: "1"
@@ -85,6 +87,7 @@ data:
   antiAffinity: "soft"
   nodeSelector: {}
   tolerations: {}
+  initContainers: {}
   resources:
     limits:
       cpu: "1"

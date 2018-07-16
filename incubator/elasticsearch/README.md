@@ -81,6 +81,7 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `client.tolerations`                 | Client tolerations                                                  | `{}`                                 |
 | `client.serviceAnnotations`          | Client Service annotations                                          | `{}`                                 |
 | `client.serviceType`                 | Client service type                                                 | `ClusterIP`                          |
+| `client.initContainers`              | Additional client initContainers                                    | `{}`                                 |
 | `master.exposeHttp`                  | Expose http port 9200 on master Pods for monitoring, etc            | `false`                              |
 | `master.name`                        | Master component name                                               | `master`                             |
 | `master.replicas`                    | Master node replicas (deployment)                                   | `2`                                  |
@@ -96,6 +97,7 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `master.persistence.size`            | Master persistent volume size                                       | `4Gi`                                |
 | `master.persistence.storageClass`    | Master persistent volume Class                                      | `nil`                                |
 | `master.persistence.accessMode`      | Master persistent Access Mode                                       | `ReadWriteOnce`                      |
+| `master.initContainers`              | Additional master initContainers                                    | `{}`                                 |
 | `data.exposeHttp`                    | Expose http port 9200 on data Pods for monitoring, etc              | `false`                              |
 | `data.replicas`                      | Data node replicas (statefulset)                                    | `3`                                  |
 | `data.resources`                     | Data node resources requests & limits                               | `{} - cpu limit must be an integer`  |
@@ -111,6 +113,7 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `data.tolerations`                   | Data tolerations                                                    | `{}`                                 |
 | `data.terminationGracePeriodSeconds` | Data termination grace period (seconds)                             | `3600`                               |
 | `data.antiAffinity`                  | Data anti-affinity policy                                           | `soft`                               |
+| `data.initContainers`                | Additional data initContainers                                      | `{}`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 

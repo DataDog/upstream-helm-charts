@@ -80,6 +80,9 @@ spec:
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
           name: data
+{{- if .Values.master.initContainers }}
+{{ toYaml .Values.master.initContainers | indent 8 }}
+{{- end }}
       containers:
       - name: elasticsearch
         env:
