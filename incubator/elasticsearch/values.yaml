@@ -8,7 +8,10 @@ image:
   tag: "6.3.1"
   pullPolicy: "IfNotPresent"
 
-plugins: {}
+# if using the plugins feature, be sure to switch to an image that includes the plugins you require.
+plugins: []
+
+# index specifies index sharding and creation rules.
 index: {}
 
 cluster:
