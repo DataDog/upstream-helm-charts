@@ -71,11 +71,17 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `cluster.xpackEnable`                | Writes the X-Pack configuration options to the configuration file   | `false`                              |
 | `cluster.config`                     | Additional cluster config appended                                  | `{}`                                 |
 | `cluster.env`                        | Cluster environment variables                                       | `{}`                                 |
+| `cluster.shortDiscoveryURI`          | Use shortened URI as discovery service                              | `{}`                                 |
+| `cluster.routingAttributes`          | Cluster routing attributes                                          | `nil`                                |
+| `cluster.slowlogEnable`              | Enable Slowlog Logging                                              | `false`                              |
+| `cluster.gclogEnable`                | Enable GC Logging                                                   | `false`                              |
 | `client.name`                        | Client component name                                               | `client`                             |
 | `client.replicas`                    | Client node replicas (deployment)                                   | `2`                                  |
 | `client.resources`                   | Client node resources requests & limits                             | `{} - cpu limit must be an integer`  |
 | `client.priorityClassName`           | Client priorityClass                                                | `nil`                                |
 | `client.heapSize`                    | Client node heap size                                               | `512m`                               |
+| `client.java.optsEqual`              | Client node java `-<key>=<value>` options                           | `{}`                                 |
+| `client.java.opts`                   | Client node java `-<key><value>` options                            | `{}`                                 |
 | `client.podAnnotations`              | Client Deployment annotations                                       | `{}`                                 |
 | `client.nodeSelector`                | Node labels for client pod assignment                               | `{}`                                 |
 | `client.tolerations`                 | Client tolerations                                                  | `{}`                                 |
@@ -90,6 +96,8 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `master.nodeSelector`                | Node labels for master pod assignment                               | `{}`                                 |
 | `master.tolerations`                 | Master tolerations                                                  | `{}`                                 |
 | `master.heapSize`                    | Master node heap size                                               | `512m`                               |
+| `master.java.optsEqual`              | Master node java `-<key>=<value>` options                           | `{}`                                 |
+| `master.java.opts`                   | Master node java `-<key><value>` options                            | `{}`                                 |
 | `master.name`                        | Master component name                                               | `master`                             |
 | `master.persistence.enabled`         | Master persistent enabled/disabled                                  | `true`                               |
 | `master.persistence.name`            | Master statefulset PVC template name                                | `data`                               |
@@ -101,6 +109,8 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `data.resources`                     | Data node resources requests & limits                               | `{} - cpu limit must be an integer`  |
 | `data.priorityClassName`             | Data priorityClass                                                  | `nil`                                |
 | `data.heapSize`                      | Data node heap size                                                 | `1536m`                              |
+| `data.java.optsEqual`                | Data node java `-<key>=<value>` options                             | `{}`                                 |
+| `data.java.opts`                     | Data node java `-<key><value>` options                              | `{}`                                 |
 | `data.persistence.enabled`           | Data persistent enabled/disabled                                    | `true`                               |
 | `data.persistence.name`              | Data statefulset PVC template name                                  | `data`                               |
 | `data.persistence.size`              | Data persistent volume size                                         | `30Gi`                               |
@@ -111,6 +121,8 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `data.tolerations`                   | Data tolerations                                                    | `{}`                                 |
 | `data.terminationGracePeriodSeconds` | Data termination grace period (seconds)                             | `3600`                               |
 | `data.antiAffinity`                  | Data anti-affinity policy                                           | `soft`                               |
+| `index`                              | Index/Action Configuration (Ex. index.number_of_shards)             | `{}`                                 |
+| `plugins`                            | Mandadtory Plugins                                                  | `[]`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
@@ -120,11 +132,13 @@ In terms of Memory resources you should make sure that you follow that equation:
 
 The YAML value of cluster.config is appended to elasticsearch.yml file for additional customization ("script.inline: on" for example to allow inline scripting)
 
+If `cluster.shortDiscoveryURI` is provided `{{ elasticsearch.fullname }}-discovery.{{ .Relase.Namespace }}` will be as the $DISCOVERY_SERVICE.
+
 # Deep dive
 
 ## Application Version
 
-This chart aims to support Elasticsearch v2 and v5 deployments by specifying the `values.yaml` parameter `appVersion`.
+This chart aims to support Elasticsearch v1, v2, v5 and v6 deployments by specifying the `values.yaml` parameter `appVersion`.
 
 ### Version Specific Features
 

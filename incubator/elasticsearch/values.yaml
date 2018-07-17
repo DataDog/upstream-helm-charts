@@ -8,12 +8,20 @@ image:
   tag: "6.3.1"
   pullPolicy: "IfNotPresent"
 
+# if using the plugins feature, be sure to switch to an image that includes the plugins you require.
+plugins: []
+
+# index specifies index sharding and creation rules.
+index: {}
+
 cluster:
   name: "elasticsearch"
   kubernetesDomain: cluster.local
   # If you want X-Pack installed, switch to an image that includes it, enable this option and toggle the features you want
   # enabled in the environment variables outlined in the README
   xpackEnable: false
+  slowlogEnable: false
+  gclogEnable: false
   config:
   env:
     # IMPORTANT: https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html#minimum_master_nodes
@@ -29,6 +37,9 @@ client:
 #  serviceAnnotations:
 #    example: client-svc-foo
   heapSize: "512m"
+  java:
+    optsEqual: {}
+    opts: {}
   antiAffinity: "soft"
   nodeSelector: {}
   tolerations: {}
@@ -49,6 +60,9 @@ master:
   exposeHttp: false
   replicas: 3
   heapSize: "512m"
+  java:
+    optsEqual: {}
+    opts: {}
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
@@ -75,6 +89,9 @@ data:
   exposeHttp: false
   replicas: 2
   heapSize: "1536m"
+  java:
+    optsEqual: {}
+    opts: {}
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
