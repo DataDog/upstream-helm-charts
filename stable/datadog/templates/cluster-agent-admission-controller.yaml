@@ -102,25 +102,25 @@ spec:
   - {{ include "datadog.fullname" . }}.{{ .Release.Namespace }}.svc
 {{ end }}
 {{- if not .Values.clusterAgent.certManager.enabled }}
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ template "datadog.fullname" . }}-admission-cert
-  labels:
-    app: {{ template "datadog.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
-type: Opaque
-data:
-{{ if .Values.clusterAgent.generateAdmissionControllerCerts }}
-  tls.crt: {{ b64enc $cert.Cert }}
-  tls.key: {{ b64enc $cert.Key }}
-{{ else }}
-  tls.crt: {{ b64enc .Values.clusterAgent.admissionControllerCert }}
-  tls.key: {{ b64enc .Values.clusterAgent.admissionControllerKey }}
-{{ end }}
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: {{ template "datadog.fullname" . }}-admission-cert
+#  labels:
+#    app: {{ template "datadog.fullname" . }}
+#    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+#    release: "{{ .Release.Name }}"
+#    heritage: "{{ .Release.Service }}"
+#type: Opaque
+#data:
+#{{ if .Values.clusterAgent.generateAdmissionControllerCerts }}
+#  tls.crt: {{ b64enc $cert.Cert }}
+#  tls.key: {{ b64enc $cert.Key }}
+#{{ else }}
+#  tls.crt: {{ b64enc .Values.clusterAgent.admissionControllerCert }}
+#  tls.key: {{ b64enc .Values.clusterAgent.admissionControllerKey }}
+#{{ end }}
 {{ end }}
 
 {{- end -}}
