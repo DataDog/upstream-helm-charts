@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "datadog.fullname" . }}-cluster-agent
+  name: {{ template "datadog.fullname" . }}-cluster-agent-svc
   labels:
     app: "{{ template "datadog.fullname" . }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
@@ -21,7 +21,7 @@ spec:
   - port: 5005 # Cluster Agent commands: has to be the same as the one exposed in the DCA.
     protocol: TCP
     name: agentport
-  - port: 5004 # K8S Admission Webhooks: has to be the same as the one exposed in the DCA.
+  - port: 5007 # K8S Admission Webhooks: has to be the same as the one exposed in the DCA.
     protocol: TCP
     name: webhook
 {{ end }}

@@ -72,7 +72,7 @@ spec:
         - containerPort: 5005
           name: agentport
           protocol: TCP
-        - containerPort: 5004
+        - containerPort: 5007
           name: webhook
           protocol: TCP
         {{- if .Values.clusterAgent.metricsProvider.enabled }}
@@ -175,11 +175,9 @@ spec:
             mountPath: /conf.d
             readOnly: true
 {{- end }}
-{{- if .Values.clusterAgent.admissionController.enabled }}
           - name: certs
             readOnly: true
             mountPath: /certs
-{{- end }}
 {{- if .Values.clusterAgent.volumeMounts }}
 {{ toYaml .Values.clusterAgent.volumeMounts | indent 10 }}
 {{- end }}
@@ -189,11 +187,9 @@ spec:
           configMap:
             name: {{ template "datadog.fullname" . }}-cluster-agent-confd
 {{- end }}
-{{- if .Values.clusterAgent.admissionController.enabled }}
         - name: certs
           secret:
-            secretName: {{ template "datadog.fullname" . }}-admission-cert
-{{- end }}
+            secretName: {{ template "datadog.fullname" . }}-cluster-agent-certs
 {{- if .Values.clusterAgent.volumes }}
 {{ toYaml .Values.clusterAgent.volumes | indent 10 }}
 {{- end }}
