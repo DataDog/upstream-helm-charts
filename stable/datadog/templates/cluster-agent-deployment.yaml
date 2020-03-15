@@ -175,9 +175,9 @@ spec:
             mountPath: /conf.d
             readOnly: true
 {{- end }}
-          - name: webhook-certs
+          - name: certs
             readOnly: true
-            mountPath: /etc/webhook/certs
+            mountPath: /certs
 {{- if .Values.clusterAgent.volumeMounts }}
 {{ toYaml .Values.clusterAgent.volumeMounts | indent 10 }}
 {{- end }}
@@ -187,9 +187,9 @@ spec:
           configMap:
             name: {{ template "datadog.fullname" . }}-cluster-agent-confd
 {{- end }}
-        - name: webhook-certs
+        - name: certs
           secret:
-            secretName: datadog-local-cluster-agent-certs
+            secretName: {{ template "datadog.fullname" . }}-cluster-agent-certs
 {{- if .Values.clusterAgent.volumes }}
 {{ toYaml .Values.clusterAgent.volumes | indent 10 }}
 {{- end }}
