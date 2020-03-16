@@ -486,6 +486,11 @@ clusterAgent:
   #     mountPath: <CONTAINER_PATH>
   #     readOnly: true
 
+  admissionController:
+    enabled: true
+    admissionControllerFailurePolicy: Ignore # TODO revert me
+    # admissionControllerFailurePolicy: Fail
+
 rbac:
 
   ## @param created - boolean - required
