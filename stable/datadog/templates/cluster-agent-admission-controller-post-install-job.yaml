@@ -1,0 +1,78 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-post-install-job"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}-post-install-job"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ template "datadog.fullname" . }}-certificate-creation
+      containers:
+        - name: create-webhook-certificate
+          image: "piochelepiotr/k8s-webhook-cert-manager"
+          command: ["./generate_certificate.sh", "--service", {{ template "datadog.fullname" . }}-cluster-agent, "--secret", {{ template "datadog.fullname" . }}-cluster-agent-certs, "--namespace", {{ .Release.Namespace }} ]
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "datadog.fullname" . }}-certificate-creation
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "datadog.fullname" . }}-certificate-creation-cluster-role
+rules:
+  - apiGroups:
+      - certificates.k8s.io
+    resources:
+      - certificatesigningrequests
+    verbs:
+      - create
+      - get
+      - delete
+  - apiGroups:
+      - certificates.k8s.io
+    resources:
+      - certificatesigningrequests/approval
+    verbs:
+      - update
+  - apiGroups: [""]
+    resources:
+      - secrets
+    verbs:
+      - create
+      - get
+      - patch
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "datadog.fullname" . }}-certificate-creation-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "datadog.fullname" . }}-certificate-creation-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "datadog.fullname" . }}-certificate-creation
+    namespace: {{ .Release.Namespace }}
