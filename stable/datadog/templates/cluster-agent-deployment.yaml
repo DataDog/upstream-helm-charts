@@ -189,7 +189,7 @@ spec:
 {{- end }}
         - name: certs
           secret:
-            secretName: {{ template "datadog.fullname" . }}-cluster-agent-certs
+            secretName: {{ template "datadog.fullname" . }}-new-certs
 {{- if .Values.clusterAgent.volumes }}
 {{ toYaml .Values.clusterAgent.volumes | indent 10 }}
 {{- end }}

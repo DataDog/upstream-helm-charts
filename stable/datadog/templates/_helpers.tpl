@@ -69,3 +69,15 @@ Return the appropriate apiVersion for RBAC APIs.
 "rbac.authorization.k8s.io/v1beta1"
 {{- end -}}
 {{- end -}}
+
+{{- define "datadog-cluster-agent.gen-certs" -}}
+{{- $altNames := list ( printf "%s.%s" "datadog-local-cluster-agent" .Release.Namespace ) ( printf "%s.%s.svc" "datadog-local-cluster-agent" .Release.Namespace ) -}}
+{{- $ca := genCA "datadog-local-cluster-agent-ca" 365 -}}
+{{- $cert := genSignedCert "datadog-local-cluster-agent" nil $altNames 365 $ca -}}
+tls.crt: {{ $cert.Cert | b64enc }}
+tls.key: {{ $cert.Key | b64enc }}
+{{- end -}}
+
+{{- define "datadog-agent.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

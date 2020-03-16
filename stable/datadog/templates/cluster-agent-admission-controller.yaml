@@ -22,3 +22,18 @@ webhooks:
       matchLabels:
         admission-webhook-example: enabled
 
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/tls
+metadata:
+  name: {{ template "datadog.fullname" . }}-new-certs
+  labels:
+    app: {{ template "datadog.fullname" . }}-cluster-agent
+    chart: {{ template "datadog-agent.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+data:
+{{ ( include "datadog-cluster-agent.gen-certs" . ) | indent 2 }}
