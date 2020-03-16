@@ -8,7 +8,7 @@
 #   - name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-webhook.local
 #     clientConfig:
 #       service:
-#         name: {{ template "datadog.fullname" . }}-cluster-agent-svc
+#         name: {{ template "datadog.fullname" . }}-cluster-agent
 #         namespace: default
 #         path: "/mutate"
 #         port: 5004
