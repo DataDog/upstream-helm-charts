@@ -21,7 +21,7 @@ webhooks:
       name: {{ template "datadog.fullname" . }}-cluster-agent
       namespace: {{ .Release.Namespace }}
       path: "/mutate"
-      port: 5007
+      port: 5004
   failurePolicy: {{ .Values.clusterAgent.admissionControllerFailurePolicy }}
   rules:
     - operations: [ "CREATE" ]

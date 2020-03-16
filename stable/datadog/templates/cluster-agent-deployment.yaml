@@ -72,7 +72,7 @@ spec:
         - containerPort: 5005
           name: agentport
           protocol: TCP
-        - containerPort: 5007
+        - containerPort: 5004
           name: webhook
           protocol: TCP
         {{- if .Values.clusterAgent.metricsProvider.enabled }}
