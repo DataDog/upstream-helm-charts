@@ -28,9 +28,6 @@ webhooks:
       apiGroups: ["apps", ""]
       apiVersions: ["v1"]
       resources: ["deployments","services","pods"]
-  namespaceSelector:
-    matchLabels:
-      admission-webhook-example: enabled
 
 ---
 
