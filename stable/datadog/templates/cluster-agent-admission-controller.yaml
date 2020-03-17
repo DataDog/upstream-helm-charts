@@ -1,8 +1,8 @@
-{{- $ca := genCA "admission-controller-ca" 3650 }}
-{{- $cn := printf "%s-%s" .Release.Name .Chart.Name }}
-{{- $altName1 := printf "%s-cluster-agent.%s" "datadog-local" .Release.Namespace }}
-{{- $altName2 := printf "%s-cluster-agent.%s.svc" "datadog-local" .Release.Namespace }}
-{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 3650 $ca }}
+{{- $ca := genCA "datadog-admission-controller-ca" 10000 }}
+{{- $cn := printf "%s-cluster-agent" (include "datadog.fullname" .) -}}
+{{- $altName1 := printf "%s.%s" $cn .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc" $cn .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 10000 $ca }}
 
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
@@ -14,7 +14,7 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 webhooks:
-- name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-webhook.local
+- name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-admissioncontroller.local
   clientConfig:
     caBundle: {{ b64enc $ca.Cert }}
     service:
@@ -22,19 +22,18 @@ webhooks:
       namespace: {{ .Release.Namespace }}
       path: "/mutate"
       port: 5004
-  failurePolicy: {{ .Values.clusterAgent.admissionControllerFailurePolicy }}
   rules:
     - operations: [ "CREATE" ]
-      apiGroups: ["apps", ""]
+      apiGroups: [""]
       apiVersions: ["v1"]
-      resources: ["deployments","services","pods"]
+      resources: ["pods"]
 
 ---
 
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "datadog.fullname" . }}-cluster-agent-certs
+  name: {{ template "datadog.fullname" . }}-cluster-agent-admission-controller-certificate
   labels:
     app: {{ template "datadog.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

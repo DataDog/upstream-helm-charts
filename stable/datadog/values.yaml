@@ -355,9 +355,9 @@ clusterAgent:
 
   containerName: cluster-agent
   image:
-    repository: piochelepiotr/cluster-agent # TODO revert me
-    tag: latest
-    pullPolicy: Always # TODO revert me
+    repository: marcotc/cluster-agent # TODO Awating agent release
+    tag: latest # TODO Awating agent release
+    pullPolicy: Always # TODO Awating agent release
 
   ## @param token - string - required
   ## This needs to be at least 32 characters a-zA-z
@@ -486,10 +486,19 @@ clusterAgent:
   #     mountPath: <CONTAINER_PATH>
   #     readOnly: true
 
+  ## @param admissionController - object - required
+  ## Admission controller webhooks that inject
+  ## cluster-wide environment variables.
+  ## Injected variables can ease setup burden when
+  ## deploying applications that require monitoring.
+  ##
+  ## ref: https://docs.datadoghq.com/agent/cluster_agent/ TODO
+  #
   admissionController:
-    enabled: true
-    admissionControllerFailurePolicy: Ignore # TODO revert me
-    # admissionControllerFailurePolicy: Fail
+    ## @param enabled - boolean - required
+    ## If true, enables cluster-wide webhooks.
+    #
+    enabled: false
 
 rbac:
 
