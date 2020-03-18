@@ -359,17 +359,17 @@ clusterAgent:
     ## @param repository - string - required
     ## Define the repository to use:
     #
-    repository: marcotc/cluster-agent # TODO Awating agent release
+    repository: marcotc/cluster-agent # TODO: Awating agent release. Revert for chart release.
 
     ## @param tag - string - required
     ## Define the Cluster-Agent version to use.
     #
-    tag: latest # TODO Awating agent release
+    tag: latest # TODO: Awating agent release. Revert for chart release.
 
     ## @param pullPolicy - string - required
     ## The Kubernetes pull policy.
     #
-    pullPolicy: Always # TODO Awating agent release
+    pullPolicy: Always # TODO: Awating agent release. Revert for chart release.
 
     ## @param pullSecrets - list of key:value strings - optional
     ## It is possible to specify docker registry credentials
@@ -538,9 +538,9 @@ clusterAgent:
   ## Admission controller webhooks that inject
   ## cluster-wide environment variables.
   ## Injected variables can ease setup burden when
-  ## deploying applications that require monitoring.
+  ## deploying applications that require access to the agent.
   ##
-  ## ref: https://docs.datadoghq.com/agent/cluster_agent/ TODO
+  ## ref: https://docs.datadoghq.com/agent/cluster_agent/ TODO: link to admission controller-specific section
   #
   admissionController:
     ## @param enabled - boolean - required
