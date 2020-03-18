@@ -1,3 +1,5 @@
+{{- if .Values.clusterAgent.admissionController.enabled }}
+
 {{- $ca := genCA "datadog-admission-controller-ca" 10000 }}
 {{- $cn := printf "%s-cluster-agent" (include "datadog.fullname" .) -}}
 {{- $altName1 := printf "%s.%s" $cn .Release.Namespace }}
@@ -27,9 +29,7 @@ webhooks:
       apiGroups: [""]
       apiVersions: ["v1"]
       resources: ["pods"]
-
 ---
-
 apiVersion: v1
 kind: Secret
 metadata:
@@ -43,3 +43,4 @@ type: Opaque
 data:
   cert.pem: {{ b64enc $cert.Cert }}
   key.pem: {{ b64enc $cert.Key }}
+{{- end -}}
