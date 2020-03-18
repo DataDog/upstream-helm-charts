@@ -16,7 +16,10 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 webhooks:
-- name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-admissioncontroller.local
+- name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-admission-controller.local
+  failurePolicy: Ignore # Applications can continue to be deployed if the webhook fails to run
+  matchPolicy: Equivalent
+  timeoutSeconds: 10
   clientConfig:
     caBundle: {{ b64enc $ca.Cert }}
     service:
@@ -29,6 +32,14 @@ webhooks:
       apiGroups: [""]
       apiVersions: ["v1"]
       resources: ["pods"]
+{{- if .Values.clusterAgent.admissionController.namespaceSelector }}
+  namespaceSelector:
+{{ toYaml .Values.clusterAgent.admissionController.namespaceSelector | indent 4 }}
+{{- end }}
+{{- if .Values.clusterAgent.admissionController.objectSelector }}
+  objectSelector:
+{{ toYaml .Values.clusterAgent.admissionController.objectSelector | indent 4 }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Secret
