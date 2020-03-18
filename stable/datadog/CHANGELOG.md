@@ -1,5 +1,11 @@
 # Datadog changelog
 
+## 2.1
+
+## 2.1.0
+
+* Add mutating admission webhook configuration, disabled by default.
+
 ## 2.0
 
 ## 2.0.11

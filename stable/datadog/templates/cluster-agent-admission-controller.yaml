@@ -1,0 +1,57 @@
+{{- if .Values.clusterAgent.admissionController.enabled }}
+
+{{- $ca := genCA "datadog-admission-controller-ca" 10000 }}
+{{- $cn := printf "%s-cluster-agent" (include "datadog.fullname" .) -}}
+{{- $altName1 := printf "%s.%s" $cn .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc" $cn .Release.Namespace }}
+{{- $cert := genSignedCert $cn nil (list $altName1 $altName2) 10000 $ca }}
+
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ template "datadog.fullname" . }}
+  labels:
+    app: {{ template "datadog.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+webhooks:
+- name: {{ template "datadog.fullname" . }}.cluster-agent-mutating-admission-controller.local
+  failurePolicy: Ignore # Applications can continue to be deployed if the webhook fails to run
+  matchPolicy: Equivalent
+  timeoutSeconds: 10
+  clientConfig:
+    caBundle: {{ b64enc $ca.Cert }}
+    service:
+      name: {{ template "datadog.fullname" . }}-cluster-agent
+      namespace: {{ .Release.Namespace }}
+      path: "/mutate"
+      port: 5004
+  rules:
+    - operations: [ "CREATE" ]
+      apiGroups: [""]
+      apiVersions: ["v1"]
+      resources: ["pods"]
+{{- if .Values.clusterAgent.admissionController.namespaceSelector }}
+  namespaceSelector:
+{{ toYaml .Values.clusterAgent.admissionController.namespaceSelector | indent 4 }}
+{{- end }}
+{{- if .Values.clusterAgent.admissionController.objectSelector }}
+  objectSelector:
+{{ toYaml .Values.clusterAgent.admissionController.objectSelector | indent 4 }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "datadog.fullname" . }}-cluster-agent-admission-controller-certificate
+  labels:
+    app: {{ template "datadog.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+type: Opaque
+data:
+  cert.pem: {{ b64enc $cert.Cert }}
+  key.pem: {{ b64enc $cert.Key }}
+{{- end -}}

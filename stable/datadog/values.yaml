@@ -359,17 +359,17 @@ clusterAgent:
     ## @param repository - string - required
     ## Define the repository to use:
     #
-    repository: datadog/cluster-agent
+    repository: marcotc/cluster-agent # TODO: Awating agent release. Revert for chart release.
 
     ## @param tag - string - required
     ## Define the Cluster-Agent version to use.
     #
-    tag: 1.5.2
+    tag: latest # TODO: Awating agent release. Revert for chart release.
 
     ## @param pullPolicy - string - required
     ## The Kubernetes pull policy.
     #
-    pullPolicy: IfNotPresent
+    pullPolicy: Always # TODO: Awating agent release. Revert for chart release.
 
     ## @param pullSecrets - list of key:value strings - optional
     ## It is possible to specify docker registry credentials
@@ -533,6 +533,53 @@ clusterAgent:
   ## Specify the pod disruption budget to apply to the cluster agents
   #
   createPodDisruptionBudget: false
+
+  ## @param admissionController - object - required
+  ## Admission controller webhooks that inject
+  ## cluster-wide environment variables.
+  ## Injected variables can ease setup burden when
+  ## deploying applications that require access to the agent.
+  ##
+  ## ref: https://docs.datadoghq.com/agent/cluster_agent/ TODO: link to admission controller-specific section
+  #
+  admissionController:
+    ## @param enabled - boolean - required
+    ## If true, enables cluster-wide webhooks.
+    #
+    enabled: false
+
+    ## @param namespaceSelector - LabelSelector - optional
+    ## NamespaceSelector decides whether to run the webhook on an object based on whether the
+    ## namespace for that object matches the selector.
+    ## The matching is performed on object.metadata.labels.
+    ## Default to the empty LabelSelector, which matches everything.
+    ##
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#set-references-in-api-objects
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#mutatingwebhook-v1beta1-admissionregistration-k8s-io
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#labelselector-v1-meta
+    #
+    # namespaceSelector:
+    #   matchLabels:
+    #     with-dd-monitoring: "true"
+    #   matchExpressions:
+    #     - {key: environment, operator: In, values: [prod,staging] }
+    #
+
+    ## @param objectSelector - LabelSelector - optional
+    ## ObjectSelector decides whether to run the webhook based on if the object has matching labels.
+    ## objectSelector is evaluated against both the oldObject and newObject that would be sent to the webhook,
+    ## and is considered to match if either object matches the selector.
+    ## Default to the empty LabelSelector, which matches everything.
+    ##
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#set-references-in-api-objects
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#mutatingwebhook-v1beta1-admissionregistration-k8s-io
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#labelselector-v1-meta
+    #
+    # objectSelector:
+    #   matchLabels:
+    #     with-dd-monitoring: "true"
+    #   matchExpressions:
+    #     - {key: environment, operator: NotIn, values: [dev]}
 
 kubeStateMetrics:
 

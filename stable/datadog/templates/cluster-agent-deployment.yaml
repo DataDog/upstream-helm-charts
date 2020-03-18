@@ -71,6 +71,11 @@ spec:
         - containerPort: 5005
           name: agentport
           protocol: TCP
+        {{- if .Values.clusterAgent.admissionController.enabled }}
+        - containerPort: 5004
+          name: admission-cntlr
+          protocol: TCP
+        {{- end }}
         {{- if .Values.clusterAgent.metricsProvider.enabled }}
         - containerPort: {{ .Values.clusterAgent.metricsProvider.service.port }}
           name: metricsapi
@@ -145,6 +150,14 @@ spec:
                 key: token
           - name: DD_KUBE_RESOURCES_NAMESPACE
             value: {{ .Release.Namespace }}
+          {{- if .Values.clusterAgent.admissionController.enabled }}
+          - name: DD_CLUSTER_AGENT_ADMISSION_CONTROLLER_ENABLED
+            value: "true"
+          - name: DD_CLUSTER_AGENT_ADMISSION_CONTROLLER_TLS_CERT_FILE
+            value: /etc/datadog-agent/admission-controller-certificate/cert.pem
+          - name: DD_CLUSTER_AGENT_ADMISSION_CONTROLLER_TLS_KEY_FILE
+            value: /etc/datadog-agent/admission-controller-certificate/key.pem
+          {{- end }}
 {{- if .Values.clusterAgent.env }}
 {{ toYaml .Values.clusterAgent.env | indent 10 }}
 {{- end }}
@@ -167,6 +180,11 @@ spec:
             subPath: datadog-cluster.yaml
             readOnly: true
 {{- end}}
+{{- if .Values.clusterAgent.admissionController.enabled }}
+          - name: admission-controller-certificate
+            readOnly: true
+            mountPath: /etc/datadog-agent/admission-controller-certificate
+{{- end }}
       volumes:
 {{- if .Values.clusterAgent.confd }}
         - name: confd
@@ -178,7 +196,11 @@ spec:
           configMap:
             name: {{ template "datadog.fullname" . }}-cluster-agent-config
 {{- end}}
-
+{{- if .Values.clusterAgent.admissionController.enabled }}
+        - name: admission-controller-certificate
+          secret:
+            secretName: {{ template "datadog.fullname" . }}-cluster-agent-admission-controller-certificate
+{{- end }}
 {{- if .Values.clusterAgent.volumes }}
 {{ toYaml .Values.clusterAgent.volumes | indent 10 }}
 {{- end }}
